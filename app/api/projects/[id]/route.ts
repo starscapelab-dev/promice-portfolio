@@ -7,12 +7,13 @@ import Project from '@/lib/models/Project';
 // GET single project
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
+    const { id } = await params;
 
-    const project = await Project.findById(params.id);
+    const project = await Project.findById(id);
 
     if (!project) {
       return NextResponse.json({ message: 'Project not found' }, { status: 404 });
@@ -31,7 +32,7 @@ export async function GET(
 // PUT - Update project (Admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -41,9 +42,10 @@ export async function PUT(
     }
 
     await connectDB();
+    const { id } = await params;
 
     const body = await request.json();
-    const project = await Project.findByIdAndUpdate(params.id, body, {
+    const project = await Project.findByIdAndUpdate(id, body, {
       new: true,
       runValidators: true,
     });
@@ -65,7 +67,7 @@ export async function PUT(
 // DELETE - Delete project (Admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -75,8 +77,9 @@ export async function DELETE(
     }
 
     await connectDB();
+    const { id } = await params;
 
-    const project = await Project.findByIdAndDelete(params.id);
+    const project = await Project.findByIdAndDelete(id);
 
     if (!project) {
       return NextResponse.json({ message: 'Project not found' }, { status: 404 });
