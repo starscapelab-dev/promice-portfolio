@@ -32,7 +32,7 @@ export default function RootLayout({
           {/* Decorative corner elements */}
           <div className="corner-accent corner-accent-top-left" />
           <div className="corner-accent corner-accent-bottom-right" />
-          <div className="vertical-text">PROMICE</div>
+          <div className="vertical-text">PROMICE </div>
 
           {children}
         </Providers>
